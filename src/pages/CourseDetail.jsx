@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
@@ -29,7 +29,7 @@ const CourseDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const loadCourse = async () => {
+  const loadCourse = useCallback(async () => {
     setLoading(true);
     setError('');
 
@@ -57,11 +57,11 @@ const CourseDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [courseId]);
 
   useEffect(() => {
     loadCourse();
-  }, [courseId]);
+  }, [loadCourse]);
 
   const resetModuleForm = () => {
     setModuleForm(emptyModuleForm);

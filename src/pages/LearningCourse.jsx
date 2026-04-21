@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
@@ -21,7 +21,7 @@ const LearningCourse = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const loadCourse = async () => {
+  const loadCourse = useCallback(async () => {
     setLoading(true);
     setError('');
 
@@ -65,9 +65,9 @@ const LearningCourse = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [courseId]);
 
-  const checkCertificate = async () => {
+  const checkCertificate = useCallback(async () => {
     setCertificateState({
       loading: true,
       error: '',
@@ -97,15 +97,15 @@ const LearningCourse = () => {
         available: false,
       });
     }
-  };
+  }, [courseId]);
 
   useEffect(() => {
     loadCourse();
-  }, [courseId]);
+  }, [loadCourse]);
 
   useEffect(() => {
     checkCertificate();
-  }, [courseId]);
+  }, [checkCertificate]);
 
   const allLessons = modules.flatMap((module) => progressByModule[module.id] || []);
   const completedLessons = allLessons.filter((lesson) => lesson.completed).length;
